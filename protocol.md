@@ -6,9 +6,10 @@ SRFP sits atop any bidirectional stream protocol, such as RS-232.
 
 Request and response headers are identical. They have the following format:
 
-|-
 | MessageType (1 byte) | MessageID (3 bytes) |||
+|-
 | MessageLength (4 bytes) ||||
+| Message (variable length) ||||
 
 ## LIST_VOLUMES (MessageType 0x01)
 

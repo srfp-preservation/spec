@@ -46,6 +46,7 @@ The names of all files in that folder, separated by NUL bytes.
 These examples assume the server is a DOS system.
 
 | Request body | Response body |
+|-
 | `''` | `'A:\0C:\0D:'` |
 | `'C:'` | `'FOLDER1\0FILE1.TXT\0FILE2.COM'` |
 | `'C:\0FOLDER1'` | `'FOLDER2\0FILE1.TXT\0FILE2.COM'` |
@@ -58,8 +59,6 @@ These examples assume the server is a DOS system.
 The path to a file to get info about, with the NUL byte (`\0`) as the directory separator, but no trailing NUL byte.
     
 #### Response
-
-Size, created time, accessed time, modified time, all as 32-bit integers. Times are in UNIX time notation.
 
 The following values, in the following order:
 
@@ -100,3 +99,13 @@ Byte stream as read from file.
 #### Notes
 
 When implementing a client, consider that all of the requested data is returned in a single response. To avoid lengthy retransmissions in the case of errors, and locking up the communication channel in the case of a multithreaded client, it is a good idea for the client to make multiple, small calls to FileContents.
+
+### 0x7F Version
+
+#### Request
+
+Empty request body.
+
+#### Response
+
+The major, minor and bugfix version numbers of the protocol version the server implements, as three successive uint8 values. So, a server implementing version 3.1.4 will return `0x030104`.

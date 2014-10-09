@@ -46,7 +46,7 @@ The names of all files in that folder, separated by NUL bytes.
 These examples assume the server is a DOS system.
 
 | Request body | Response body |
-|-
+|--------------|---------------|
 | `''` | `'A:\0C:\0D:'` |
 | `'C:'` | `'FOLDER1\0FILE1.TXT\0FILE2.COM'` |
 | `'C:\0FOLDER1'` | `'FOLDER2\0FILE1.TXT\0FILE2.COM'` |

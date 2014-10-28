@@ -16,7 +16,7 @@ MessageType (uint8)
 MessageID (uint16)
 : In requests, this value starts at zero and increments for each subsequent request. In responses, this value matches the MessageID of the request that triggered the response.
 
-MessageLength (uint32)
+MessageLength (uint16)
 : Length of the following message value, in bytes, and not including the checksum.
 
 Message (Variable length)

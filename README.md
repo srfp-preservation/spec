@@ -1,10 +1,10 @@
-# Simple Read-only File Protocol
+# Simple Read-only File Protocol v 1.0.1
 
 SRFP is a protocol that allows read-only access to filesystems on a remote host.
 
-Its intended use case is data preservation; a modern client computer can connect to an older server, and access files on any volume that server is capable of reading, without the client needing to be compatible with the physical media or understand the filesystem.
+It is designed primarily for data preservation use, with the server as the legacy computer whose files are being preserved, and the client as the modern computer.
 
-SRFP is a binary client-server protocol, that can sit atop any bidirectional binary stream protocol. Because of the intended use case, it is designed primarily for an uncomplicated server-side implementation; most error control logic takes place on the client.
+SRFP is designed so that the server component is simple to implement, and can run on any platform, over any bidirectional data stream. The server exposes expose files rather than block devices, meaning the client can retrieve files from legacy or exotic filesystems without having to support the filesystem in question itself. SRFP servers expose all connected volumes, allowing SRFP to be used to retrieve files from legacy or exotic physical media onto a modern computer, by using an older computer running a SRFP server as a proxy.
 
 ## Message Format
 

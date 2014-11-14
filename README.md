@@ -27,21 +27,21 @@ Checksum (uint32)
 
 ## Message Types
 
-### 0x01 DirectoryList
+### DirectoryList
 
-#### Request
+#### 0x01 Request
 
 Absolute path to the directory to list, with the NUL byte (`\0`) as the directory separator, but no trailing NUL byte.
 
-If the request value is empty, list the root directory if the OS has such a concept (e.g. on Unix), or the available volumes otherwise.
+If the request value is empty, list the root directory.
 
-#### Response
+#### 0x81 Response
 
 The names of all files in that folder, separated by NUL bytes.
 
 #### Examples
 
-These examples assume the server is a DOS system.
+The following are example request and response bodies from a system running DOS.
 
 | Request body | Response body |
 |--------------|---------------|
@@ -49,14 +49,20 @@ These examples assume the server is a DOS system.
 | `'C:'` | `'FOLDER1\0FILE1.TXT\0FILE2.COM'` |
 | `'C:\0FOLDER1'` | `'FOLDER2\0FILE1.TXT\0FILE2.COM'` |
 
-    
-### 0x02 NodeInfo
+#### Notes
 
-#### Request
+Servers should expose all volumes accessible to them as a single SRFP filesystem. (So, in operating systems without a concept of a 'root directory', the root of the SRFP filesystem should be a list of volumes, as in the DOS example above.)
+
+File and directory names may use any character except a null byte. Clients should anticipate this; clients that expose a virtual filesystem should escape and unescape file names appropriately.
+
+    
+### NodeInfo
+
+#### 0x02 Request
 
 The path to a file to get info about, with the NUL byte (`\0`) as the directory separator, but no trailing NUL byte.
     
-#### Response
+#### 0x82 Response
 
 The following values, in the following order:
 
@@ -75,9 +81,9 @@ AccessedTime (uint32)
 ModifiedTime (uint32)
 : Time last modified, in seconds since January 1970.
 
-### 0x03 FileContents
+### FileContents
 
-#### Request
+#### 0x03 Request
 
 The following data, in the following order:
 
@@ -90,7 +96,7 @@ Length (uint32)
 Path (variable length)
 : Path to the file to read from, with the NUL byte (`\0`) as the directory separator, but no trailing NUL byte.
 
-#### Response
+#### 0x83 Response
 
 Byte stream as read from file.
 
@@ -98,13 +104,16 @@ Byte stream as read from file.
 
 When implementing a client, consider that all of the requested data is returned in a single response. To avoid lengthy retransmissions in the case of errors, and locking up the communication channel in the case of a multithreaded client, it is a good idea for the client to make multiple, small calls to FileContents.
 
-### 0x7F Version
+### Version
 
-#### Request
+#### 0x7F Request
 
 Empty request body.
 
-#### Response
+#### 0xFF Response
+
+The major, minor and bugfix version numbers of the protocol version the server implements, as three successive uint8 values. So, a server implementing version 3.1.4 will return `0x030104`.
+
 ### Errors
 
 #### 0x80 Error

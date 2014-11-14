@@ -25,8 +25,6 @@ Message (Variable length)
 Checksum (uint32)
 : CRC32 checksum of the entire message, including headers, using the polynomial `0xedb88320` (identical to Ethernet, zip, png and so on).
 
-Response messages can indicate an error by setting the first bit of the MessageID high (i.e. adding `0x80`), and replacing the usual message body with an error message.
-
 ## Message Types
 
 ### 0x01 DirectoryList
@@ -107,5 +105,15 @@ When implementing a client, consider that all of the requested data is returned 
 Empty request body.
 
 #### Response
+### Errors
 
-The major, minor and bugfix version numbers of the protocol version the server implements, as three successive uint8 values. So, a server implementing version 3.1.4 will return `0x030104`.
+#### 0x80 Error
+
+Denotes an error message.
+
+Contains one uint8 field, which can have one of the following values. (The names are not part of the protocol, but are provided as a consistent naming scheme for client code.
+
+| Value | Name | Meaning |
+|-------|------|---------|
+| `0x01` | `DOES_NOT_EXIST` | The file or folder specified in the request does not exist. |
+| `0xFF` | `OTHER` | Other error. The server should output descriptive text to the console. |
